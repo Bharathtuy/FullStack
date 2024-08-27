@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Root Variables */
+        :root {
+            --background-color: #F5F7FA;
+            --text-color: #333333;
+            --navbar-background: #FFFFFF;
+            --card-background: #FFFFFF;
+            --profile-card-background: #FFFFFF;
+            --profile-icon-background: #6A0DAD;
+            --primary-color: #6A0DAD;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --icon-color: #FFFFFF;
+            --border-color: #E0E0E0;
+            --hover-background-color: #F0F0F0;
+            --navbar-text-color: #333333;
+            --navbar-text-color-dark: #FFFFFF;
+        }
+
+        /* Dark Theme Variables */
+        body.dark-theme {
+            --background-color: #1E1E1E;
+            --text-color: #FFFFFF;
+            --navbar-background: #2C2C2C;
+            --profile-card-background: #2C2C2C;
+            --profile-icon-background: #B39DDB;
+            --primary-color: #B39DDB;
+            --card-background: #2C2C2C;
+            --card-shadow: rgba(255, 255, 255, 0.1);
+            --icon-color: #FFFFFF;
+            --border-color: #444444;
+            --hover-background-color: #333333;
+            --navbar-text-color: #FFFFFF;
+        }
+
+        /* General Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--navbar-background);
+            padding: 25px 30px; /* Increased padding for height */
+            align-items: center;
+            box-shadow: 0 2px 10px var(--card-shadow);
+            transition: background-color 0.3s;
+        }
+
+        .navbar-left h2 {
+            margin: 0;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 32px; /* Increased font size */
+        }
+
+        .navbar-left ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 30px; /* Increased gap between items */
+        }
+
+        .navbar-left ul li {
+            margin-right: 25px;
+        }
+
+        .navbar-left ul li a {
+            color: var(--navbar-text-color);
+            text-decoration: none;
+            padding: 14px 24px; /* Increased padding for links */
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 22px; /* Increased font size */
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left ul li a.active,
+        .navbar-left ul li a:hover {
+            background-color: var(--primary-color);
+            color: var(--icon-color);
+        }
+
+        .navbar-left ul li a i {
+            margin-right: 10px;
+        }
+
+        .navbar-right .profile-icon {
+            background-color: var(--profile-icon-background);
+            border-radius: 50%;
+            width: 70px; /* Increased size */
+            height: 70px; /* Increased size */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--icon-color);
+            font-weight: bold;
+            box-shadow: 0 2px 10px var(--card-shadow);
+            transition: background-color 0.3s;
+        }
+
+        .icon-symbol {
+            font-size: 24px; /* Increased font size */
+            margin-right: 10px;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 30px;
+            gap: 90px; /* Increased gap between cards */
+        }
+
+        .dashboard-card {
+            background-color: var(--card-background);
+            border-radius: 15px;
+            padding: 30px; /* Increased padding */
+            box-shadow: 0 4px 15px var(--card-shadow);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            flex: 1 1 calc(20% - 30px);
+            max-width: calc(20% - 30px);
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .dashboard-card:hover {
+            box-shadow: 0 8px 30px var(--card-shadow);
+        }
+
+        .dashboard-card h3 {
+            font-size: 26px; /* Increased font size */
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .dashboard-card p {
+            font-size: 20px; /* Increased font size */
+            margin: 8px 0;
+        }
+
+        .dashboard-card .icon {
+            width: 70px; /* Increased size */
+            height: 70px; /* Increased size */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px; /* Increased font size */
+            color: var(--icon-color);
+            background-color: var(--primary-color);
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px var(--card-shadow);
+        }
+
+        /* User Information Table */
+        .user-info {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .user-info th,
+        .user-info td {
+           
+            padding: 20px; /* Increased padding */
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .user-info th {
+           
+            background-color: var(--primary-color);
+            color: var(--icon-color);
+            font-size: 20px; /* Increased font size */
+        }
+
+        .user-info td {
+            background-color: var(--card-background);
+            font-size: 20px; /* Increased font size */
+        }
+
+        /* Theme Toggle Styles */
+        .theme-toggle {
+            position: absolute;
+            top: 55px;
+            right: 140px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-toggle label {
+            cursor: pointer;
+            font-size: 18px; /* Increased font size */
+        }
+
+        #theme-switch {
+            width: 40px;
+            height: 20px;
+            appearance: none;
+            background-color: var(--border-color);
+            border-radius: 10px;
+            position: relative;
+            outline: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #theme-switch:before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            background-color: var(--icon-color);
+            border-radius: 50%;
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            transition: left 0.3s, background-color 0.3s;
+        }
+
+        #theme-switch:checked {
+            background-color: var(--primary-color);
+        }
+
+        #theme-switch:checked:before {
+            left: 21px;
+            background-color: var(--background-color);
+        }
+    </style>
+</head>
+
+<body class="light-theme">
+    <div class="theme-toggle">
+        <label for="theme-switch">Dark Mode</label>
+        <input type="checkbox" id="theme-switch">
+    </div>
+
+    <div class="navbar">
+        <div class="navbar-left">
+            <h2><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h2>
+            <ul>
+                <li><a href="adminpage.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="usermanagement.html"><i class="fas fa-users"></i> User Management</a></li>
+                <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
+                <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <div class="profile-icon"><i class="fas fa-user"></i></div>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="dashboard-card" data-department="Training Placement" data-students="120" data-head="John Doe" data-phone="+1 234 567 890">
+            <div class="icon"><i class="fas fa-building"></i></div>
+            <h3>Training Placement</h3>
+            <p>120</p>
+        </div>
+
+        <div class="dashboard-card" data-department="PS Team" data-students="80" data-head="Jane Smith" data-phone="+1 987 654 321">
+            <div class="icon"><i class="fas fa-users"></i></div>
+            <h3>PS Team</h3>
+            <p>80</p>
+        </div>
+
+        <div class="dashboard-card" data-department="Special Lab" data-students="150" data-head="Mark Johnson" data-phone="+1 555 666 777">
+            <div class="icon"><i class="fas fa-flask"></i></div>
+            <h3>Special Lab</h3>
+            <p>150</p>
+        </div>
+        <!-- <div class="dashboard-card" data-department="Special Lab" data-students="150" data-head="Mark Johnson" data-phone="+1 555 666 777">
+            <div class="icon"></div>
+            <h3>Others</h3>
+            
+        </div> -->
+    </div>
+
+    <table class="user-info">
+        <thead>
+            <tr>
+                <th>Department</th>
+                <th>Total Students</th>
+                <th>Reporting Head</th>
+                <th>Phone Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="dept"></td>
+                <td id="students"></td>
+                <td id="head"></td>
+                <td id="phone"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        const themeSwitch = document.getElementById('theme-switch');
+        const body = document.body;
+
+        themeSwitch.addEventListener('change', () => {
+            if (themeSwitch.checked) {
+                body.classList.add('dark-theme');
+            } else {
+                body.classList.remove('dark-theme');
+            }
+        });
+
+        const dashboardCards = document.querySelectorAll('.dashboard-card');
+        const userInfoTable = document.querySelector('.user-info');
+        const deptCell = document.getElementById('dept');
+        const studentsCell = document.getElementById('students');
+        const headCell = document.getElementById('head');
+        const phoneCell = document.getElementById('phone');
+
+        dashboardCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const department = card.dataset.department;
+                const students = card.dataset.students;
+                const head = card.dataset.head;
+                const phone = card.dataset.phone;
+
+                deptCell.textContent = department;
+                studentsCell.textContent = students;
+                headCell.textContent = head;
+                phoneCell.textContent = phone;
+
+                userInfoTable.style.display = 'table';
+            });
+        });
+    </script>
+</body>
+
+</html>

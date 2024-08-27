@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --background-color: #F5F7FA;
+            --text-color: #333333;
+            --navbar-background: #FFFFFF;
+            --profile-card-background: #FFFFFF;
+            --profile-icon-background: #6A0DAD;
+            --primary-color: #6A0DAD;
+            --card-background: #FFFFFF;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --icon-color: #FFFFFF;
+            --border-color: #E0E0E0;
+            --hover-background-color: #F0F0F0;
+            --navbar-text-color: #333333;
+            --navbar-text-color-dark: #FFFFFF;
+        }
+
+        body.dark-theme {
+            --background-color: #1E1E1E;
+            --text-color: #FFFFFF;
+            --navbar-background: #2C2C2C;
+            --profile-card-background: #2C2C2C;
+            --profile-icon-background: #B39DDB;
+            --primary-color: #B39DDB;
+            --card-background: #2C2C2C;
+            --card-shadow: rgba(255, 255, 255, 0.1);
+            --icon-color: #FFFFFF;
+            --border-color: #444444;
+            --hover-background-color: #333333;
+            --navbar-text-color: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--navbar-background);
+            padding: 20px 40px;
+            align-items: center;
+            box-shadow: 0 2px 10px var(--card-shadow);
+            transition: background-color 0.3s;
+        }
+
+        .navbar-left h2 {
+            margin: 0;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 28px;
+        }
+
+        .navbar-left ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 30px;
+        }
+
+        .navbar-left ul li a {
+            color: var(--navbar-text-color);
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 20px;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left ul li a.active,
+        .navbar-left ul li a:hover {
+            background-color: var(--primary-color);
+            color: var(--icon-color);
+        }
+
+        .navbar-left ul li a i {
+            margin-right: 10px;
+            font-size: 22px;
+        }
+
+        .navbar-right .profile-icon {
+            background-color: var(--profile-icon-background);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--icon-color);
+            font-weight: bold;
+            font-size: 28px;
+            box-shadow: 0 2px 10px var(--card-shadow);
+            transition: background-color 0.3s;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .card {
+    background-color: var(--profile-card-background);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 15px var(--card-shadow);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    height: 350px; /* Further increased height */
+    overflow: hidden;
+}
+
+        .card:hover {
+            box-shadow: 0 8px 30px var(--card-shadow);
+        }
+
+        .profile-card {
+            text-align: center;
+        }
+
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 4px 10px var(--card-shadow);
+        }
+
+        .profile-card h3 {
+    margin-bottom: 15px;
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 24px; /* Increase font size */
+}
+.profile-card p {
+    margin: 8px 0;
+    font-size: 18px; /* Increase font size */
+}
+
+        .profile-card .status {
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .contact-icon {
+            color: #2196F3;
+            margin-left: 5px;
+            font-size: 18px;
+        }
+
+        /* .performance-graph h4 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 25px;
+            font-weight: 700;
+            color: var(--primary-color);
+        } */
+        .performance-graph h4,
+.attendance-overview h4,
+.recent-reports h4 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 28px; /* Increase font size */
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+        .performance-graph canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .attendance-overview h4 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 25px;
+            color: var(--primary-color);
+        }
+
+        .attendance-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .detail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: var(--hover-background-color);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px var(--card-shadow);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .detail:hover {
+            box-shadow: 0 4px 10px var(--card-shadow);
+        }
+
+        .detail p {
+            margin: 8px 0;
+            text-align: center;
+        }
+        
+
+        .icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--icon-color);
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px var(--card-shadow);
+        }
+
+        .recent-reports h4 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 25px;
+            color: var(--primary-color);
+        }
+
+        .recent-reports ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .recent-reports ul li {
+            background-color: var(--hover-background-color);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px var(--card-shadow);
+            margin-bottom: 10px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .recent-reports ul li:hover {
+            box-shadow: 0 4px 10px var(--card-shadow);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 50px;
+            right: 140px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-toggle label {
+            cursor: pointer;
+        }
+
+        #theme-switch {
+            width: 40px;
+            height: 20px;
+            appearance: none;
+            background-color: var(--border-color);
+            border-radius: 10px;
+            position: relative;
+            outline: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #theme-switch:before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            background-color: var(--icon-color);
+            border-radius: 50%;
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            transition: left 0.3s, background-color 0.3s;
+        }
+
+        #theme-switch:checked:before {
+            left: 21px;
+            background-color: var(--primary-color);
+        }
+
+        #theme-switch:checked {
+            background-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-left">
+            <h2>My Dashboard</h2>
+            <ul>
+                <li><a href="userpage.html" class="active"><i class="fas fa-user"></i> Dashboard</a></li>
+                <li><a href="placementpage.html"><i class= "fas fa-briefcase"></i> Placement Details</a></li>
+                <li><a href="resume.html"><i class="fas fa-tachometer-alt"></i> Resume</a></li>
+                <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
+                <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <div class="profile-icon">A</div>
+        </div>
+    </header>
+    <main class="dashboard">
+        <div class="card profile-card">
+            <img src="undraw_Male_avatar_g98d.png" alt="Profile Picture" class="profile-picture">
+            <h3>Ravi Kumar</h3>
+            <p class="status">Active</p>
+            <p>Email: ravikumar.bitsathy.ac.in</p>
+            <p>Phone: +91 9994263782 <i class="contact-icon fas fa-phone"></i></p>
+            <p>Reporting Head: Dr. Sasi Kumar</p>
+            <p>Domain: Special Labs</p>
+        </div>
+        <div class="card performance-graph">
+            <h4>Performance Graph</h4>
+            <canvas id="performanceChart"></canvas>
+        </div>
+        <div class="card attendance-overview">
+            <h4>Attendance Overview</h4>
+            <div class="attendance-details">
+                <div class="detail">
+                    <div class="icon"><i class="fas fa-calendar-check"></i></div>
+                    <p>Total Present: 20</p>
+                </div>
+                <div class="detail">
+                    <div class="icon"><i class="fas fa-calendar-times"></i></div>
+                    <p>Total Absent: 5</p>
+                </div>
+                <div class="detail">
+                    <div class="icon"><i class="fas fa-calendar-day"></i></div>
+                    <p>Total Days: 30</p>
+                </div>
+                <div class="detail">
+                    <div class="icon"><i class="fas fa-percent"></i></div>
+                    <p>Attendance: 83%</p>
+                </div>
+            </div>
+        </div>
+        <div class="card recent-reports">
+            <h4>Recent Reports</h4>
+            <ul>
+                <li>Report 1</li>
+                <li>Report 2</li>
+                <!-- Add more reports as needed -->
+            </ul>
+        </div>
+    </main>
+    <div class="theme-toggle">
+        <label for="theme-switch">Toggle Dark Mode</label>
+        <input type="checkbox" id="theme-switch">
+    </div>
+    <script>
+        const themeSwitch = document.getElementById('theme-switch');
+        themeSwitch.addEventListener('change', () => {
+            document.body.classList.toggle('dark-theme', themeSwitch.checked);
+        });
+
+        // Initialize Performance Chart
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'Performance',
+                    data: [12, 19, 3, 5, 2, 3, 7],
+                    backgroundColor: 'rgba(106, 13, 173, 0.2)',
+                    borderColor: 'rgba(106, 13, 173, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

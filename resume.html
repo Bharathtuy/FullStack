@@ -1,0 +1,369 @@
+ 
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Your existing styles here */
+        :root {
+            --background-color: #F5F7FA;
+            --text-color: #333333;
+            --navbar-background: #FFFFFF;
+            --profile-card-background: #FFFFFF;
+            --primary-color: #6A0DAD;
+            --card-background: #FFFFFF;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --icon-color: #FFFFFF;
+            --border-color: #E0E0E0;
+            --navbar-text-color: #333333;
+            --navbar-text-color-dark: #FFFFFF;
+        }
+
+        body.dark-theme {
+            --background-color: #1E1E1E;
+            --text-color: #FFFFFF;
+            --navbar-background: #2C2C2C;
+            --profile-card-background: #2C2C2C;
+            --primary-color: #B39DDB;
+            --card-background: #2C2C2C;
+            --card-shadow: rgba(255, 255, 255, 0.1);
+            --icon-color: #FFFFFF;
+            --border-color: #444444;
+            --navbar-text-color: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .navbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--navbar-background);
+    padding: 20px 40px; /* Increased padding for more space */
+    align-items: center;
+    box-shadow: 0 2px 10px var(--card-shadow);
+    transition: background-color 0.3s;
+}
+
+.navbar-left h2 {
+    margin: 0;
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 28px; /* Increased font size */
+}
+
+.navbar-left ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 30px; /* Increased gap between items */
+}
+
+.navbar-left ul li a {
+    color: var(--navbar-text-color);
+    text-decoration: none;
+    padding: 12px 20px; /* Increased padding for larger clickable area */
+    border-radius: 10px; /* Adjusted border-radius */
+    font-weight: 500;
+    font-size: 20px; /* Increased font size */
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-left ul li a.active, 
+.navbar-left ul li a:hover {
+    background-color: var(--primary-color);
+    color: var(--icon-color);
+}
+
+.navbar-left ul li a i {
+    margin-right: 10px; /* Increased margin for better spacing */
+    font-size: 22px; /* Increased icon size */
+}
+
+.navbar-right .profile-icon {
+    background-color: var(--profile-icon-background);
+    border-radius: 50%;
+    width: 60px; /* Increased size of the profile icon */
+    height: 60px; /* Increased size of the profile icon */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--icon-color);
+    font-weight: bold;
+    font-size: 28px; /* Increased font size of the icon */
+    box-shadow: 0 2px 10px var(--card-shadow);
+    transition: background-color 0.3s;
+}
+
+        .upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: var(--profile-card-background);
+            border-radius: 15px;
+            box-shadow: 0 4px 20px var(--card-shadow);
+            text-align: center;
+            position: relative;
+        }
+
+        .upload-container h2 {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .upload-container input[type="file"] {
+            margin: 20px 0;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-size: 18px;
+        }
+
+        .upload-container button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--primary-color);
+            color: var(--icon-color);
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .upload-container button:hover {
+            background-color: #5c2d91;
+            transform: scale(1.05);
+        }
+
+        .resume-preview {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh; /* Full viewport height */
+            background-color: var(--background-color);
+            display: none; /* Hidden by default */
+            z-index: 1000;
+            box-shadow: 0 2px 10px var(--card-shadow);
+        }
+
+        .resume-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .resume-preview .close-preview {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary-color);
+            color: var(--icon-color);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .feedback-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            box-shadow: 0 2px 10px var(--card-shadow);
+        }
+
+        .feedback-message.success {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .feedback-message.error {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 50px;
+            right: 140px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #theme-switch {
+            width: 40px;
+            height: 20px;
+            appearance: none;
+            background-color: var(--border-color);
+            border-radius: 10px;
+            position: relative;
+            outline: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #theme-switch:before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            background-color: var(--icon-color);
+            border-radius: 50%;
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            transition: left 0.3s, background-color 0.3s;
+        }
+
+        #theme-switch:checked {
+            background-color: var(--primary-color);
+        }
+
+        #theme-switch:checked:before {
+            left: 21px;
+            background-color: var(--background-color);
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <div class="theme-toggle">
+        <label for="theme-switch">Dark Mode</label>
+        <input type="checkbox" id="theme-switch">
+    </div>
+
+    <div class="navbar">
+        <div class="navbar-left">
+            <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+            <ul>
+                <li><a href="userpage.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="placementpage.html"><i class="fas fa-briefcase"></i> Placement Details</a></li>
+                <li><a href="resume.html" class="active"><i class="fas fa-file-alt"></i> Resume</a></li>
+                <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
+                <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <div class="profile-icon"><i class="fas fa-user"></i></div>
+        </div>
+    </div>
+
+    <div class="upload-container" id="upload-container">
+        <h2>Upload Your Resume</h2>
+        <input type="file" id="resume-upload" accept=".pdf,.doc,.docx">
+        <p>Accepted formats: PDF, DOC, DOCX</p>
+        <button onclick="uploadResume()">Upload</button>
+        <div class="feedback-message" id="feedback-message"></div>
+    </div>
+
+    <div class="resume-preview" id="resume-preview">
+        <button class="close-preview" onclick="closePreview()">×</button>
+    </div>
+
+    <script>
+        document.getElementById('theme-switch').addEventListener('change', function(event) {
+            document.body.classList.toggle('dark-theme', event.target.checked);
+            document.querySelectorAll('.navbar-left ul li a').forEach(link => {
+                link.style.color = event.target.checked ? 'var(--navbar-text-color-dark)' : 'var(--navbar-text-color)';
+            });
+        });
+
+        // Load resume from local storage if available
+        window.onload = function() {
+            const savedResume = localStorage.getItem('uploadedResume');
+            const resumeType = localStorage.getItem('resumeType');
+            if (savedResume) {
+                displayResume(savedResume, resumeType);
+            }
+        };
+
+        function uploadResume() {
+            const fileInput = document.getElementById('resume-upload');
+            const feedbackMessage = document.getElementById('feedback-message');
+            const previewContainer = document.getElementById('resume-preview');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                feedbackMessage.textContent = 'Please select a file to upload.';
+                feedbackMessage.classList.add('error');
+                feedbackMessage.style.display = 'block';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const fileContent = e.target.result;
+                localStorage.setItem('uploadedResume', fileContent);
+                localStorage.setItem('resumeType', file.type);
+                displayResume(fileContent, file.type);
+                feedbackMessage.textContent = 'Resume uploaded successfully!';
+                feedbackMessage.classList.remove('error');
+                feedbackMessage.classList.add('success');
+                feedbackMessage.style.display = 'block';
+                fileInput.style.display = 'none'; // Hide file input
+                document.querySelector('button').style.display = 'none'; // Hide upload button
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function displayResume(fileContent, fileType) {
+            const previewContainer = document.getElementById('resume-preview');
+            const uploadContainer = document.getElementById('upload-container');
+
+            if (fileType === 'application/pdf') {
+                previewContainer.innerHTML = `
+                    <iframe src="${fileContent}" frameborder="0"></iframe>
+                    <button class="close-preview" onclick="closePreview()">×</button>
+                `;
+                previewContainer.style.display = 'flex'; // Show the preview container
+            } else if (fileType === 'application/msword' || fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                previewContainer.innerHTML = `
+                    <p>File uploaded. To view the document, please download and open it with a suitable application.</p>
+                    <button class="close-preview" onclick="closePreview()">×</button>
+                `;
+                previewContainer.style.display = 'flex'; // Show the preview container
+            }
+
+            uploadContainer.style.display = 'none'; // Hide upload container
+        }
+
+        function closePreview() {
+            const previewContainer = document.getElementById('resume-preview');
+            const uploadContainer = document.getElementById('upload-container');
+            previewContainer.style.display = 'none';
+            uploadContainer.style.display = 'flex'; // Show upload container again
+            localStorage.removeItem('uploadedResume');
+            localStorage.removeItem('resumeType');
+            location.reload(); // Reload the page to show the upload form again
+        }
+    </script>
+</body>
+</html>

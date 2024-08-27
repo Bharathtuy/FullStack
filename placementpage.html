@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Root variables */
+        :root {
+            --background-color: #F5F7FA;
+            --text-color: #333333;
+            --navbar-background: #FFFFFF;
+            --primary-color: #6A0DAD;
+            --icon-color: #FFFFFF;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --hover-background-color: #F0F0F0;
+        }
+
+        /* Dark theme */
+        body.dark-theme {
+            --background-color: #1E1E1E;
+            --text-color: #FFFFFF;
+            --navbar-background: #2C2C2C;
+            --primary-color: #B39DDB;
+            --icon-color: #FFFFFF;
+            --hover-background-color: #333333;
+        }
+
+        /* Global styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--navbar-background);
+            padding: 20px 40px;
+            align-items: center;
+            box-shadow: 0 2px 10px var(--card-shadow);
+            transition: background-color 0.3s;
+        }
+
+        .navbar-left h2 {
+            margin: 0;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 28px;
+        }
+
+        .navbar-left ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 30px;
+        }
+
+        .navbar-left ul li a {
+            color: var(--navbar-text-color);
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 20px;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left ul li a.active,
+        .navbar-left ul li a:hover {
+            background-color: var(--primary-color);
+            color: var(--icon-color);
+        }
+
+        .navbar-left ul li a i {
+            margin-right: 10px;
+            font-size: 22px;
+        }
+
+        .navbar-right .profile-icon {
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--icon-color);
+            font-weight: bold;
+            font-size: 28px;
+            box-shadow: 0 2px 10px var(--card-shadow);
+            transition: background-color 0.3s;
+            margin-left: 20px;
+        }
+
+        /* Content styles */
+        .content {
+            padding: 30px;
+        }
+
+        .content h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            text-align: center;
+        }
+
+        /* Section and card styles */
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .placement-card,
+        .intern-card,
+        .course-card {
+            background-color: var(--navbar-background);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px var(--card-shadow);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .placement-card h2,
+        .intern-card h2,
+        .course-card h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .placement-card p,
+        .intern-card p,
+        .course-card p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* Grid container for side-by-side layout */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        canvas {
+            background-color: var(--navbar-background);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px var(--card-shadow);
+            padding: 20px;
+        }
+
+        /* Theme toggle switch styles */
+        .theme-toggle {
+            position: absolute;
+            top: 50px;
+            right: 140px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-toggle label {
+            cursor: pointer;
+
+        }
+
+        #theme-switch {
+            width: 40px;
+            height: 20px;
+            appearance: none;
+            background-color: var(--hover-background-color);
+            border-radius: 10px;
+            position: relative;
+            outline: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #theme-switch:before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            background-color: var(--icon-color);
+            border-radius: 50%;
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            transition: left 0.3s, background-color 0.3s;
+        }
+
+        #theme-switch:checked:before {
+            left: 21px;
+            background-color: var(--primary-color);
+        }
+
+        #theme-switch:checked {
+            background-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-left">
+            <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+            <ul>
+                <li><a href="userpage.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="placementpage.html" class="active"><i class="fas fa-briefcase"></i> Placement Details</a></li>
+                <li><a href="resume.html"><i class="fas fa-file-alt"></i> Resume</a></li>
+                <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
+                <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <div class="theme-toggle">
+                <label for="theme-switch">Toggle Dark Mode</label>
+                <input type="checkbox" id="theme-switch">
+            </div>
+            <div class="profile-icon">A</div>
+        </div>
+    </header>
+    <main class="content">
+        <!-- Grid container for sections -->
+        <div class="grid-container">
+
+            <!-- Intern Placement Details Section -->
+           
+            <!-- Courses and Certifications Section -->
+            <div class="section">
+                <h2>Courses and Certifications</h2>
+                <div class="course-card">
+                    <h2>Course: Full Stack Web Development</h2>
+                    <p>Platform: Coursera</p>
+                    <p>Completion Date: March 2023</p>
+                    <h2>Course: Java Programming</h2>
+                    <p>Platform: Nptel</p>
+                    <p>Completion Date: August 2023</p>
+                    <br>
+                    
+                </div>
+                <!-- Add more course cards as needed -->
+            </div>
+
+            <!-- CGPA Graph Section -->
+            <div class="section">
+                <h2>CGPA Year-wise</h2>
+                <div class="chart-container">
+                    <canvas id="cgpaChart"></canvas>
+                </div>
+            </div>
+
+            <!-- LeetCode Graph Section -->
+            <div class="section">
+                <h2>LeetCode Problem Solving</h2>
+                <div class="chart-container">
+                    <canvas id="leetcodeChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Charts.js Script -->
+    <script>
+        // CGPA Chart
+        var ctx = document.getElementById('cgpaChart').getContext('2d');
+        var cgpaChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['2020', '2021', '2022', '2023'],
+                datasets: [{
+                    label: 'CGPA',
+                    data: [7.5, 8.0, 8.2, 8.5],
+                    backgroundColor: 'rgba(106, 13, 173, 0.2)',
+                    borderColor: 'rgba(106, 13, 173, 1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 10
+                    }
+                }
+            }
+        });
+
+        // LeetCode Chart
+        var ctx2 = document.getElementById('leetcodeChart').getContext('2d');
+        var leetcodeChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Easy', 'Medium', 'Hard'],
+                datasets: [{
+                    label: 'Problems Solved',
+                    data: [50, 75, 10],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 99, 132, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Theme toggle script
+        const themeSwitch = document.getElementById('theme-switch');
+        const body = document.body;
+
+        themeSwitch.addEventListener('change', () => {
+            body.classList.toggle('dark-theme');
+        });
+    </script>
+</body>
+</html>

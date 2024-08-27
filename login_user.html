@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <link rel="stylesheet" href="login_styles.css">
+</head>
+<style>
+    /* General Styles for Login Pages */
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(to bottom right, #f0f2f5, #e1e5ea);
+}
+
+.login-container {
+    background: #ffffff;
+    padding: 60px 40px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+}
+
+.institution-logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 30px;
+}
+
+h1 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.greeting {
+    margin-bottom: 35px;
+    color: #666;
+    font-size: 18px;
+    line-height: 1.4;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    max-width: 100%;
+    padding: 16px 18px;
+    border: 1px solid #999;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #63b8f0;
+    outline: none;
+    box-shadow: 0 0 8px rgba(99, 184, 240, 0.3);
+}
+
+.password-strength-indicator {
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #ddd;
+    margin-bottom: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #4285f4;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background: #3366cc;
+}
+
+.forgot-password {
+    margin-top: 20px;
+    text-align: left;
+    width: 100%;
+}
+
+.forgot-password a {
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.remember-me input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 50px;
+        max-width: 400px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .greeting {
+        font-size: 16px;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    button {
+        font-size: 14px;
+        padding: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 30px;
+        max-width: 360px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    .greeting {
+        font-size: 14px;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    button {
+        font-size: 12px;
+        padding: 12px;
+    }
+}
+</style>
+<body>
+    <div class="login-container">
+        <img src="Bannari_Amman_Institute_of_Technology_logo.png" alt="Institution Logo" class="institution-logo">
+
+        <h1>Welcome, User!</h1>
+        <p class="greeting">Please log in to continue.</p>
+
+        <form class="login-form" id="login-form">
+            <input type="email" id="email" name="email" placeholder="Email" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <div class="password-strength-indicator"></div>
+            <button type="button" onclick="redirectToAdminPage()">Login</button>
+            <div class="forgot-password">
+                <a href="/forgot-password">Forgot your password?</a>
+            </div>
+            <!-- <div class="remember-me">
+                <input type="checkbox" id="remember-me">
+                <label for="remember-me">Remember me</label>
+            </div> -->
+        </form>
+    </div>
+
+    <script src="login_script.js"></script>
+    <script>function redirectToAdminPage() {
+        // Basic form validation
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+    
+        // if (!email || !password) {
+        //     alert("Please fill in all required fields.");
+        //     return;
+        // }
+    
+        // // Check email format (you can add more robust validation)
+        // if (!isValidEmail(email)) {
+        //     alert("Invalid email address.");
+        //     return;
+        // }
+    
+        // Simulate successful login (replace with actual login logic)
+        window.location.href = 'userpage.html';
+    }
+    
+    // function isValidEmail(email) {
+    //     // Basic email validation
+    //     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //     return emailRegex.test(email);
+    // }
+    
+    // Add password strength indicator and error handling as needed</script>
+</body>
+</html>

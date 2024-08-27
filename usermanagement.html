@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --background-color: #F5F7FA;
+            --text-color: #333333;
+            --navbar-background: #FFFFFF;
+            --card-background: #FFFFFF;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --primary-color: #6A0DAD;
+            --border-color: #E0E0E0;
+            --hover-background-color: #F0F0F0;
+            --navbar-text-color: #333333;
+            --navbar-text-color-dark: #FFFFFF;
+            --button-background-color: #6A0DAD;
+            --button-hover-color: #5a009e;
+            --button-edit-color: #FF9800;
+            --button-delete-color: #F44336;
+            --button-text-color: #FFFFFF;
+            --input-border-color: #E0E0E0;
+            --input-focus-border-color: #6A0DAD;
+        }
+
+        body.dark-theme {
+            --background-color: #1E1E1E;
+            --text-color: #FFFFFF;
+            --navbar-background: #2C2C2C;
+            --card-background: #2C2C2C;
+            --card-shadow: rgba(255, 255, 255, 0.1);
+            --primary-color: #B39DDB;
+            --border-color: #444444;
+            --hover-background-color: #333333;
+            --navbar-text-color: #FFFFFF;
+            --button-background-color: #B39DDB;
+            --button-hover-color: #8e24aa;
+            --button-edit-color: #FFC107;
+            --button-delete-color: #F44336;
+            --input-border-color: #444444;
+            --input-focus-border-color: #B39DDB;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--navbar-background);
+            padding: 25px 30px; /* Increased padding for height */
+            align-items: center;
+            box-shadow: 0 2px 10px var(--card-shadow);
+            transition: background-color 0.3s;
+        }
+
+        .navbar-left h2 {
+            margin: 0;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 32px; /* Increased font size */
+        }
+
+        .navbar-left ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 30px; /* Increased gap between items */
+        }
+
+        .navbar-left ul li {
+            margin-right: 25px;
+        }
+
+        .navbar-left ul li a {
+            color: var(--navbar-text-color);
+            text-decoration: none;
+            padding: 14px 24px; /* Increased padding for links */
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 22px; /* Increased font size */
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left ul li a.active,
+        .navbar-left ul li a:hover {
+            background-color: var(--primary-color);
+            color: var(--icon-color);
+        }
+
+        .navbar-left ul li a i {
+            margin-right: 10px;
+        }
+
+        .navbar-right .profile-icon {
+            background-color: var(--profile-icon-background);
+            border-radius: 50%;
+            width: 70px; /* Increased size */
+            height: 70px; /* Increased size */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--icon-color);
+            font-weight: bold;
+            box-shadow: 0 2px 10px var(--card-shadow);
+            transition: background-color 0.3s;
+        }
+
+
+        /* .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--navbar-background);
+            padding: 15px 30px;
+            align-items: center;
+            box-shadow: 0 2px 10px var(--card-shadow);
+            transition: background-color 0.3s;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .navbar-left h2 {
+            margin: 0;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left h2 i {
+            margin-right: 10px;
+        }
+
+        .navbar-left ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar-left ul li {
+            margin-right: 20px;
+        }
+
+        .navbar-left ul li a {
+            color: var(--navbar-text-color);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 18px;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left ul li a.active, 
+        .navbar-left ul li a:hover {
+            background-color: var(--primary-color);
+            color: var(--button-text-color);
+        }
+
+        .navbar-left ul li a i {
+            margin-right: 8px;
+        }
+
+        .navbar-right .profile-icon {
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--button-text-color);
+            font-weight: bold;
+            box-shadow: 0 2px 10px var(--card-shadow);
+            transition: background-color 0.3s;
+        }
+
+        /**/
+         .user-management {
+            padding: 30px;
+        } 
+
+        .search-bar {
+            
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-bar input[type="text"] {
+            height: 25px;
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--input-border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-bar input[type="text"]:focus {
+            border-color: var(--input-focus-border-color);
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+           
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .search-bar button:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .user-table th, .user-table td {
+            padding: 15px;
+            text-align: left;
+            font-size: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-table th {
+            background-color: var(--primary-color);
+            color: var(--button-text-color);
+        }
+
+        .user-table tr {
+            transition: background-color 0.3s;
+        }
+
+        .user-table tr:hover {
+            background-color: var(--hover-background-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-buttons button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .action-buttons button:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        .action-buttons .edit-button {
+            background-color: var(--button-edit-color);
+        }
+
+        .action-buttons .delete-button {
+            background-color: var(--button-delete-color);
+        }
+
+        .action-buttons .edit-button:hover {
+            background-color: #e68900;
+        }
+
+        .action-buttons .delete-button:hover {
+            background-color: #d32f2f;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 55px;
+            right: 140px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-toggle label {
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        #theme-switch {
+            width: 40px;
+            height: 20px;
+            appearance: none;
+            background-color: var(--border-color);
+            border-radius: 10px;
+            position: relative;
+            outline: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #theme-switch:before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            background-color: var(--button-text-color);
+            border-radius: 50%;
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            transition: left 0.3s, background-color 0.3s;
+        }
+
+        #theme-switch:checked {
+            background-color: var(--primary-color);
+        }
+
+        #theme-switch:checked:before {
+            left: 21px;
+            background-color: var(--background-color);
+        }
+
+        #add-user-button {
+            padding: 10px 20px;
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            margin-top: 20px;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+        #add-user-button:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        .modal {
+            display: none;
+            
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: var(--card-background);
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            box-shadow: 0 5px 15px var(--card-shadow);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .modal-header .close {
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .modal-body label {
+            font-weight: 500;
+        }
+
+        .modal-body input[type="text"],
+        .modal-body input[type="email"] {
+            padding: 10px;
+            border: 1px solid var(--input-border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .modal-body input[type="text"]:focus,
+        .modal-body input[type="email"]:focus {
+            border-color: var(--input-focus-border-color);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-footer button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .modal-footer .save-button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+        }
+
+        .modal-footer .cancel-button {
+            background-color: #e0e0e0;
+            color: var(--text-color);
+        }
+
+        .modal-footer .save-button:hover {
+            background-color: var(--button-hover-color);
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <div class="theme-toggle">
+        <label for="theme-switch">Dark Mode</label>
+        <input type="checkbox" id="theme-switch">
+    </div>
+
+    <div class="navbar">
+        <div class="navbar-left">
+            <h2><i class="fas fa-users"></i> User Management</h2>
+            <ul>
+                <li><a href="adminpage.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="usermanagement.html" class="active"><i class="fas fa-users"></i> User Management</a></li>
+                <li><a href="settings.html"><i class="fas fa-cogs"></i> Settings</a></li>
+                <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <div class="profile-icon"><i class="fas fa-user"></i></div>
+        </div>
+    </div>
+
+    <div class="user-management">
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search users...">
+            <button id="search-button">Search</button>
+        </div>
+        <button id="add-user-button">Add User</button>
+
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="user-table-body">
+                <!-- User rows will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- User Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Add User</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <label for="name">Name:</label>
+                <input type="text" id="name" placeholder="Enter name">
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" placeholder="Enter email">
+
+                <label for="phone">Phone Number:</label>
+                <input type="text" id="phone" placeholder="Enter phone number">
+
+                <label for="status">Status:</label>
+                <input type="text" id="status" placeholder="Enter status (Active/Inactive)">
+            </div>
+            <div class="modal-footer">
+                <button class="save-button" onclick="saveUser()">Save</button>
+                <button class="cancel-button" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let users = [
+            { id: 1, name: 'John Doe', email: 'john.doe@example.com', phone: '123-456-7890', status: 'Active' },
+            { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', phone: '098-765-4321', status: 'Inactive' }
+        ];
+    
+        let editUserId = null;
+    
+        const userTableBody = document.getElementById('user-table-body');
+        const userModal = document.getElementById('userModal');
+        const modalTitle = document.getElementById('modal-title');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const statusInput = document.getElementById('status');
+        const themeSwitch = document.getElementById('theme-switch');
+    
+        function renderTable(filteredUsers = users) {
+            userTableBody.innerHTML = '';
+            filteredUsers.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phone}</td>
+                    <td>${user.status}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="edit-button" onclick="openEditUserModal(${user.id})"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="delete-button" onclick="deleteUser(${user.id})"><i class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    </td>
+                `;
+                userTableBody.appendChild(row);
+            });
+        }
+    
+        function openAddUserModal() {
+            editUserId = null;
+            modalTitle.textContent = 'Add User';
+            nameInput.value = '';
+            emailInput.value = '';
+            phoneInput.value = '';
+            statusInput.value = '';
+            userModal.style.display = 'block';
+        }
+    
+        function openEditUserModal(id) {
+            const user = users.find(u => u.id === id);
+            if (user) {
+                editUserId = id;
+                modalTitle.textContent = 'Edit User';
+                nameInput.value = user.name;
+                emailInput.value = user.email;
+                phoneInput.value = user.phone;
+                statusInput.value = user.status;
+                userModal.style.display = 'block';
+            }
+        }
+    
+        function closeModal() {
+            userModal.style.display = 'none';
+        }
+    
+        function saveUser() {
+            const name = nameInput.value;
+            const email = emailInput.value;
+            const phone = phoneInput.value;
+            const status = statusInput.value;
+    
+            if (editUserId) {
+                const user = users.find(u => u.id === editUserId);
+                user.name = name;
+                user.email = email;
+                user.phone = phone;
+                user.status = status;
+            } else {
+                const newUser = {
+                    id: users.length ? users[users.length - 1].id + 1 : 1,
+                    name,
+                    email,
+                    phone,
+                    status
+                };
+                users.push(newUser);
+            }
+    
+            renderTable();
+            closeModal();
+        }
+    
+        function deleteUser(id) {
+            users = users.filter(user => user.id !== id);
+            renderTable();
+        }
+    
+        document.getElementById('add-user-button').addEventListener('click', openAddUserModal);
+    
+        document.getElementById('search-input').addEventListener('input', function () {
+            const query = this.value.toLowerCase();
+            const filteredUsers = users.filter(user => user.name.toLowerCase().includes(query));
+            renderTable(filteredUsers);
+        });
+    
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme', themeSwitch.checked);
+        }
+    
+        themeSwitch.addEventListener('change', toggleTheme);
+    
+        // Set initial theme based on checkbox
+        document.body.classList.toggle('dark-theme', themeSwitch.checked);
+    
+        renderTable();
+    </script>
+    
+</body>
+</html>

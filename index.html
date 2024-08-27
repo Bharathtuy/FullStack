@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Account Type</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Institution Logo -->
+        <img src="Bannari_Amman_Institute_of_Technology_logo.png" alt="Institution Logo" class="institution-logo">
+        
+        <h1>Choose Account Type</h1>
+        <div class="form-container">
+            <div class="option" id="user-option" onclick="redirectToLogin('user')">
+                <img src="icons8-user-32.png" alt="User Logo" class="logo">
+                <span style="font-size: 30px; font-weight: bold;">User</span>
+            </div>
+            <div class="option" id="admin-option" onclick="redirectToLogin('admin')">
+                <img src="icons8-user-shield-94.png" alt="Admin Logo" class="logo">
+                <span style="font-size: 30px; font-weight: bold;">Admin</span>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+    <script>
+    function redirectToLogin(accountType) {
+        if (accountType === 'user') {
+            window.location.href = 'login_user.html'; // Replace with the actual path to the user login page
+        } else if (accountType === 'admin') {
+            window.location.href = 'login_admin.html'; // Replace with the actual path to the admin login page
+        }
+    }
+</script>
+</body>
+</html>
